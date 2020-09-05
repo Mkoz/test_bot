@@ -1,3 +1,5 @@
+import os
+
 class UserManager:
 	STATE_EMPTY = "0"
 	STATE_FIRST_FILLED = "1"
@@ -46,15 +48,27 @@ class UserManager:
 		tmpU = self.myMap.get(id)
 		if tmpU == None:
 			tmpU = User(id)
-
 		tmpU.first_doc = file
+		self.myMap.update({id : tmpU})
+
+	def setFirstDocName(self, id, name):
+		tmpU = self.myMap.get(id)
+		if tmpU == None:
+			tmpU = User(id)
+		tmpU.first_doc_name = name
+		self.myMap.update({id : tmpU})
+
+	def setSecondDocName(self, id, name):
+		tmpU = self.myMap.get(id)
+		if tmpU == None:
+			tmpU = User(id)
+		tmpU.second_doc_name = name
 		self.myMap.update({id : tmpU})
 
 	def setSecondDoc(self, id, file):
 		tmpU = self.myMap.get(id)
 		if tmpU == None:
 			tmpU = User(id)
-
 		tmpU.second_doc = file
 		self.myMap.update({id : tmpU})
 
@@ -65,6 +79,13 @@ class UserManager:
 		else:
 			return tmpU.first_doc
 
+	def getFirstDocName(self, id):
+		tmpU = self.myMap.get(id)
+		if tmpU == None:
+			return None
+		else:
+			return tmpU.first_doc_name
+
 	def getSecondDoc(self, id):
 		tmpU = self.myMap.get(id)
 		if tmpU == None:
@@ -72,18 +93,76 @@ class UserManager:
 		else:
 			return tmpU.second_doc
 
+	def getSecondDocName(self, id):
+		tmpU = self.myMap.get(id)
+		if tmpU == None:
+			return None
+		else:
+			return tmpU.second_doc_name
+
+	def getUser(self, id):
+		tmpU = self.myMap.get(id)
+		if tmpU == None:
+			tmpU = User(id)
+		return tmpU
+
+	def setMessId(self, id, aMessId):
+		tmpU = self.myMap.get(id)
+		if tmpU != None:
+			tmpU.messId = aMessId
+
+	def getMessId(self, id, aMessId):
+		tmpU = self.myMap.get(id)
+		if tmpU != None:
+			return tmpU.messId
+		else:
+			return None
+
+	def clean(self, id):
+		user = self.myMap.get(id)
+		print("id: " + user.id)
+
+		user.state = self.STATE_EMPTY
+		user.mode = ""
+		first_doc_name = ""
+		second_doc_name = ""
+		os.remove(user.first_doc)
+		os.remove(user.second_doc)
+		user.first_doc = ""
+		user.second_doc = ""
+
 class User:
 
 	def __init__(self, anId):
 		self.id = anId
+		self.state = UserManager.STATE_EMPTY
+		self.mode = ""
+		self.first_doc = ""
+		self.second_doc = ""
+		self.messId = 0
 
 	state = UserManager.STATE_EMPTY
-	mode = UserManager.MOD_MERGE
+	mode = ""
 	first_doc = ""
+	first_doc_name = ""
+	second_doc_name = ""
 	second_doc = ""
-	id=""
+	id = ""
+	messId = 0
 
 class Sub:
-	number=0
+
+	def __init__(self, aNamber, aTime, aText):
+		self.number = aNamber
+		self.time = aTime
+		self.text = aText
+
+	def dump(self):
+		print(self.number)
+		print(self.time)
+		print(self.text)
+		print("--------------------------------")
+
+	number="0"
 	time=""
 	text=""
